@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+<!--  <conversionRule conversionWord="vcl"-->
+<!--                  converterClass="io.reactiverse.contextual.logging.LogbackConverter"/>-->
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+<!--      <pattern>%d{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX", UTC} [%thread] [%vcl{requestId}] %-5level %logger{0} - %msg%n</pattern>-->
+      <pattern>%d{"yyyy-MM-dd'T'HH:mm:ss,SSSXXX", UTC} [%thread] %-5level %logger{0} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="info">
+    <appender-ref ref="STDOUT" />
+  </root>
+
+</configuration>
+
+
+
+<!--Google Cloud-->
+<!--<configuration>-->
+<!--  <appender name="CLOUD" class="com.google.cloud.logging.logback.LoggingAppender">-->
+<!--    &lt;!&ndash; Optional : filter logs at or above a level &ndash;&gt;-->
+<!--    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+<!--      <level>INFO</level>-->
+<!--    </filter>-->
+<!--    <log>application.log</log> &lt;!&ndash; Optional : default java.log &ndash;&gt;-->
+
+<!--    &lt;!&ndash; Optional : default: auto-detected, fallback: global &ndash;&gt;-->
+<!--    &lt;!&ndash; <resourceType>gae_app</resourceType> &ndash;&gt;-->
+
+<!--    &lt;!&ndash; Optional &ndash;&gt;-->
+<!--    &lt;!&ndash; <enhancer>com.example.logging.logback.enhancers.ExampleEnhancer</enhancer>&ndash;&gt;-->
+<!--    <flushLevel>WARN</flushLevel> &lt;!&ndash; Optional : default ERROR &ndash;&gt;-->
+<!--  </appender>-->
+
+<!--  <root level="info">-->
+<!--    <appender-ref ref="CLOUD"/>-->
+<!--  </root>-->
+<!--</configuration>-->

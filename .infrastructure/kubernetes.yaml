@@ -1,0 +1,82 @@
+# ================================
+# Deployment
+# ================================
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-mvc-kotlin
+  labels:
+    app: spring-boot-mvc-kotlin
+    # parent: ehealth
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: spring-boot-mvc-kotlin
+  template:
+    metadata:
+      name: spring-boot-mvc-kotlin
+      labels:
+        app: spring-boot-mvc-kotlin
+        # parent: ehealth
+    spec:
+      # workload identity - need to create GCP service account
+      # serviceAccountName: spring-boot-mvc-kotlin
+      containers:
+        - name: spring-boot-mvc-kotlin
+          # GCP Container Registry
+          image: eu.gcr.io/ehealth-development/spring-boot-mvc-kotlin:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          # https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-overview#allowable_resource_ranges
+          #  resources:
+          #    limits:
+          #      cpu: 1050m
+          #      ephemeral-storage: 1Gi
+          #      memory: 1080Mi
+          #    requests:
+          #      cpu: 1050m
+          #      ephemeral-storage: 1Gi
+          #      memory: 1080Mi
+          env:
+            - name: KUBERNETES_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            # - name: GOOGLE_APPLICATION_CREDENTIALS
+            #   value: "/configuration/gcp-serviceaccount.json"
+            - name: ELASTIC_APM_CONFIG_FILE
+              value: "/configuration/elasticapm.properties"
+          volumeMounts:
+            - name: spring-boot-mvc-kotlin-secret
+              mountPath: /configuration/
+      volumes:
+        - name: spring-boot-mvc-kotlin-secret
+          secret:
+            defaultMode: 420
+            secretName: spring-boot-mvc-kotlin
+
+# ================================
+# Service
+# ================================
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-boot-mvc-kotlin
+  labels:
+    app: spring-boot-mvc-kotlin
+    # parent: ehealth
+spec:
+  type: ClusterIP
+  selector:
+    app: spring-boot-mvc-kotlin
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+
